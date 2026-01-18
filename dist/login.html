@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <link rel="icon" href="https://necenbpitqhjjekatnxr.supabase.co/storage/v1/object/sign/Produtos/Utilitarios%20e%20Logos/logo.png?token=eyJraWQiOiJzdG9yYWdlLXVybC1zaWduaW5nLWtleV9hYWYyM2I2ZS1mMmU3LTQyN2UtYjVmOC1iYmU3ZDYzMDBiMjIiLCJhbGciOiJIUzI1NiJ9.eyJ1cmwiOiJQcm9kdXRvcy9VdGlsaXRhcmlvcyBlIExvZ29zL2xvZ28ucG5nIiwiaWF0IjoxNzU4Njg3MTMwLCJleHAiOjE3OTAyMjMxMzB9.T6BtWnd1aayUz7hzRLFnHDtF1e16k0MLZoCu7iYkFPM" type="image/png" />
+  <title>Admin - Zapp</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            primary: {
+              light: '#f87171',
+              DEFAULT: '#dc2626',
+              dark: '#991b1b',
+            }
+          }
+        }
+      }
+    }
+  </script>
+</head>
+<body class="h-screen flex items-center justify-center bg-gradient-to-br from-red-600 via-red-500 to-red-700">
+  
+  <div class="bg-white p-8 rounded-2xl shadow-2xl w-96 transform transition-all hover:scale-[1.01] animate-fadeIn">
+    
+    
+    <div class="flex justify-center mb-6">
+      <img src="https://necenbpitqhjjekatnxr.supabase.co/storage/v1/object/sign/Produtos/Utilitarios%20e%20Logos/logo.png?token=eyJraWQiOiJzdG9yYWdlLXVybC1zaWduaW5nLWtleV9hYWYyM2I2ZS1mMmU3LTQyN2UtYjVmOC1iYmU3ZDYzMDBiMjIiLCJhbGciOiJIUzI1NiJ9.eyJ1cmwiOiJQcm9kdXRvcy9VdGlsaXRhcmlvcyBlIExvZ29zL2xvZ28ucG5nIiwiaWF0IjoxNzU4NzQ1MDkxLCJleHAiOjE3OTAyODEwOTF9.dH5ikk3wM11Jq8zQTp6BdmrUCyU16C2JjEFf4BfwGyQ" 
+           alt="Logo Restaurante" 
+           class="w-20 h-20 rounded-full shadow-lg border-4 border-red-500">
+    </div>
+
+    
+    <h1 class="text-2xl font-bold text-center text-gray-800 mb-6">
+      Acesso ao <span class="text-primary">Painel Admin</span>
+    </h1>
+
+    
+    <div class="mb-5">
+      <label class="block text-gray-700 font-semibold mb-1">Email</label>
+      <input type="email" id="email" 
+             class="w-full border-2 border-gray-200 rounded-lg px-4 py-2 focus:outline-none focus:border-primary focus:ring-2 focus:ring-primary/50 transition"
+             placeholder="admin@restaurante.com">
+    </div>
+
+    
+    <button onclick="login()" 
+      class="w-full py-2 rounded-lg font-semibold text-white bg-gradient-to-r from-red-500 to-red-700 shadow-lg hover:from-red-600 hover:to-red-800 transition transform hover:scale-[1.02]">
+      Entrar
+    </button>
+
+    
+    <p id="erro" class="text-red-600 font-medium text-center mt-4 hidden animate-pulse">Email inválido ou sem permissão!</p>
+
+  </div>
+
+  
+  <style>
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(20px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+    .animate-fadeIn {
+      animation: fadeIn 0.8s ease-out forwards;
+    }
+  </style>
+
+  
+  <script type="module">
+    import { createClient } from 'https://cdn.jsdelivr.net/npm/@supabase/supabase-js/+esm'
+    //conexao com o supabase
+    const supabaseUrl = "https://necenbpitqhjjekatnxr.supabase.co"
+    const supabaseAnonKey = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im5lY2VuYnBpdHFoampla2F0bnhyIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTc2NTAxOTYsImV4cCI6MjA3MzIyNjE5Nn0.lIJTxEPAqd-afrydfe0tsPFzyqlIHuhKvM_7FIGxYAg"
+    const supabase = createClient(supabaseUrl, supabaseAnonKey)
+    
+    //resgata o email no BD e valida
+
+    async function login() {
+      const email = document.getElementById("email").value.trim()
+      const erroMsg = document.getElementById("erro")
+
+      if (!email) {
+        erroMsg.textContent = "Digite um email!"
+        erroMsg.classList.remove("hidden")
+        return
+      }
+      
+      const { data, error } = await supabase
+        .from("usuarios")
+        .select("*")
+        .eq("email", email)
+        .eq("isAdmin", true)
+        .maybeSingle()
+
+      if (error) {
+        console.error("Erro ao buscar usuário:", error)
+        erroMsg.textContent = "Erro no servidor."
+        erroMsg.classList.remove("hidden")
+        return
+      }
+
+      if (!data) {
+        erroMsg.textContent = "Email não encontrado ou sem permissão."
+        erroMsg.classList.remove("hidden")
+        return
+      }
+
+      
+      localStorage.setItem("usuarioAdmin", JSON.stringify(data))
+
+      
+      window.location.href = "index.html"
+    }
+
+    window.login = login
+  </script>
+</body>
+</html>

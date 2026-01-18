@@ -1,0 +1,289 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <link rel="icon" href="https://necenbpitqhjjekatnxr.supabase.co/storage/v1/object/sign/Produtos/Utilitarios%20e%20Logos/logo.png?token=eyJraWQiOiJzdG9yYWdlLXVybC1zaWduaW5nLWtleV9hYWYyM2I2ZS1mMmU3LTQyN2UtYjVmOC1iYmU3ZDYzMDBiMjIiLCJhbGciOiJIUzI1NiJ9.eyJ1cmwiOiJQcm9kdXRvcy9VdGlsaXRhcmlvcyBlIExvZ29zL2xvZ28ucG5nIiwiaWF0IjoxNzU4Njg3MTMwLCJleHAiOjE3OTAyMjMxMzB9.T6BtWnd1aayUz7hzRLFnHDtF1e16k0MLZoCu7iYkFPM" type="image/png" />
+  <title>Admin - Zapp</title>
+
+  
+  <link href="assets/vendors/css/vendor.bundle.base.css" rel="stylesheet">
+  <link href="assets/css/style.css" rel="stylesheet">
+
+  
+  <script src="https://cdn.tailwindcss.com"></script>
+
+ 
+  <script src="https://kit.fontawesome.com/a2d9d6c6a5.js" crossorigin="anonymous"></script>
+
+  
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+  <script src="https://cdn.jsdelivr.net/npm/qz-tray/qz-tray.js"></script>
+
+
+  <script type="module" src="./app.js"></script>
+
+
+  <style>
+    
+    .card-radius { border-radius: 12px; }
+    .modal-backdrop { background: rgba(0,0,0,0.45); }
+    
+    .sidebar-fixed { position: fixed; left: 0; top: 0; height: 100vh; overflow-y: auto; z-index: 40; }
+    
+    .main-with-sidebar { margin-left: 240px; }
+  </style>
+</head>
+<body class="bg-white font-sans">
+
+  <!-- Estrutura base -->
+  <div class="container-scroller flex">
+
+    <!-- SIDEBAR -->
+    <nav id="sidebar" class="sidebar sidebar-offcanvas bg-white shadow-lg sidebar-fixed w-60">
+      <div class="sidebar-brand-wrapper d-flex align-items-center justify-content-center border-b p-4">
+        
+        <img src="https://necenbpitqhjjekatnxr.supabase.co/storage/v1/object/sign/Produtos/Utilitarios%20e%20Logos/logo.png?token=eyJraWQiOiJzdG9yYWdlLXVybC1zaWduaW5nLWtleV9hYWYyM2I2ZS1mMmU3LTQyN2UtYjVmOC1iYmU3ZDYzMDBiMjIiLCJhbGciOiJIUzI1NiJ9.eyJ1cmwiOiJQcm9kdXRvcy9VdGlsaXRhcmlvcyBlIExvZ29zL2xvZ28ucG5nIiwiaWF0IjoxNzU4NzQ1MDkxLCJleHAiOjE3OTAyODEwOTF9.dH5ikk3wM11Jq8zQTp6BdmrUCyU16C2JjEFf4BfwGyQ" alt="Logo" class="w-20 h-20 rounded-full object-cover">
+      </div>
+
+      <ul class="nav mt-4">
+        <li class="nav-item"><a class="nav-link px-4 py-3 block hover:bg-gray-100" href="#dashboard">📊 Dashboard</a></li>
+        <li class="nav-item"><a class="nav-link px-4 py-3 block hover:bg-gray-100" href="#pedidos">📋 Pedidos</a></li>
+        <li class="nav-item"><a class="nav-link px-4 py-3 block hover:bg-gray-100" href="#produtos">🍽️ Produtos</a></li>
+        <li class="nav-item"><a class="nav-link px-4 py-3 block hover:bg-gray-100" href="#usuarios">👤 Usuários</a></li>
+        <li class="nav-item"><a class="nav-link px-4 py-3 block hover:bg-gray-100" href="#cupons">🏷️ Cupons</a></li>
+        <li class="nav-item"><a class="nav-link px-4 py-3 block hover:bg-gray-100" href="#relatorios">📈 Relatórios</a></li>
+      </ul>
+    </nav>
+
+    <!-- MAIN -->
+    <main class="flex-1 p-6 main-with-sidebar">
+
+      <!-- Topbar -->
+      <header class="flex items-center justify-between mb-6">
+        <h1 class="text-2xl font-semibold text-gray-700">Painel Administrativo</h1>
+        <div id="auth-area" class="flex items-center gap-3">
+         
+          <a id="btn-entrar-placeholder" href="login.html" class="px-3 py-1 border rounded">Entrar</a>
+        </div>
+      </header>
+
+      <!-- DASHBOARD -->
+      <section id="dashboard" class="mb-8">
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+          <div class="bg-white p-4 card-radius shadow">
+            <div class="text-sm text-gray-500">Pedidos hoje</div>
+            <div id="totalPedidosHoje" class="text-2xl font-bold mt-2">0</div>
+          </div>
+          <div class="bg-white p-4 card-radius shadow">
+            <div class="text-sm text-gray-500">Faturamento hoje</div>
+            <div id="faturamentoHoje" class="text-2xl font-bold mt-2">R$ 0,00</div>
+          </div>
+          <div class="bg-white p-4 card-radius shadow flex flex-col">
+            <div class="flex items-center justify-between">
+              <div class="text-sm text-gray-500">Vendas últimos 7 dias</div>
+              <button class="text-sm px-3 py-1 rounded border border-gray-200 hover:bg-gray-100" onclick="carregarDashboard()">Atualizar</button>
+            </div>
+            <canvas id="graficoVendas" class="mt-3" style="max-height:110px"></canvas>
+          </div>
+        </div>
+      </section>
+
+      <!-- PEDIDOS  -->
+      <section id="pedidos" class="mb-8">
+        <div class="flex items-center justify-between mb-3">
+          <h2 class="text-xl font-semibold text-gray-700">📋 Pedidos</h2>
+          <div>
+            <button class="px-3 py-1 bg-red-600 text-white rounded" onclick="carregarPedidos()">🔄 Atualizar</button>
+          </div>
+        </div>
+        <div class="bg-white p-4 card-radius shadow overflow-x-auto">
+          <table class="w-full text-left table-auto">
+            <thead class="bg-gray-50">
+              <tr>
+                <th class="p-2 text-sm">#</th>
+                <th class="p-2 text-sm">Cliente</th>
+                <th class="p-2 text-sm">Total</th>
+                <th class="p-2 text-sm">Status</th>
+                <th class="p-2 text-sm">Ações</th>
+              </tr>
+            </thead>
+            <tbody id="tabelaPedidos" class="divide-y"></tbody>
+          </table>
+        </div>
+      </section>
+
+      <!--  PRODUTOS -->
+      <section id="produtos" class="mb-8">
+        <div class="flex items-center justify-between mb-3">
+          <h2 class="text-xl font-semibold text-gray-700">🍽️ Produtos</h2>
+          <div>
+            <button class="px-3 py-2 bg-green-600 text-white rounded" onclick="abrirModalProduto()">+ Novo Produto</button>
+          </div>
+        </div>
+        <div class="bg-white p-4 card-radius shadow overflow-x-auto">
+          <table class="w-full text-left table-auto">
+            <thead class="bg-gray-50">
+              <tr>
+                <th class="p-2 text-sm">Imagem</th>
+                <th class="p-2 text-sm">Nome</th>
+                <th class="p-2 text-sm">Preço</th>
+                <th class="p-2 text-sm">Estoque</th>
+                <th class="p-2 text-sm">Ações</th>
+              </tr>
+            </thead>
+            <tbody id="tabelaProdutos" class="divide-y"></tbody>
+          </table>
+        </div>
+      </section>
+
+      <!-- USUARIOS  -->
+      <section id="usuarios" class="mb-8">
+        <h2 class="text-xl font-semibold text-gray-700 mb-3">👤 Usuários</h2>
+        <div class="bg-white p-4 card-radius shadow overflow-x-auto">
+          <table class="w-full text-left table-auto">
+            <thead class="bg-gray-50">
+              <tr>
+                <th class="p-2 text-sm">Nome</th>
+                <th class="p-2 text-sm">Email</th>
+                <th class="p-2 text-sm">Telefone</th>
+                <th class="p-2 text-sm">Admin</th>
+                <th class="p-2 text-sm">Criado</th>
+                <th class="p-2 text-sm">Ações</th>
+              </tr>
+            </thead>
+            <tbody id="tabelaUsuarios" class="divide-y"></tbody>
+          </table>
+        </div>
+      </section>
+
+      <!-- CUPONS (CRUD)  -->
+      <section id="cupons" class="mb-8 hidden">
+        <div class="flex items-center justify-between mb-3">
+          <h2 class="text-xl font-semibold text-gray-700">🏷️ Cupons</h2>
+          <div>
+            <button class="px-3 py-2 bg-green-600 text-white rounded" onclick="abrirModalCupom()">+ Novo Cupom</button>
+          </div>
+        </div>
+
+        <div class="bg-white p-4 card-radius shadow overflow-x-auto">
+          <table class="w-full text-left table-auto">
+            <thead class="bg-gray-50">
+              <tr>
+                <th class="p-2 text-sm">Código</th>
+                <th class="p-2 text-sm">Tipo</th>
+                <th class="p-2 text-sm">Desconto</th>
+                <th class="p-2 text-sm">Ativo</th>
+                <th class="p-2 text-sm">Ações</th>
+              </tr>
+            </thead>
+            <tbody id="tabelaCupons" class="divide-y"></tbody>
+          </table>
+        </div>
+      </section>
+
+      <!-- RELATÓRIOS -->
+      <section id="relatorios" class="mb-8 hidden">
+        <div class="grid md:grid-cols-2 gap-4 mb-4">
+          <div class="bg-white p-4 card-radius shadow">
+            <h3 class="text-sm text-gray-600">Vendas diárias (últimos 7 dias)</h3>
+            <canvas id="graficoVendasRel" style="height:180px"></canvas>
+          </div>
+          <div class="bg-white p-4 card-radius shadow">
+            <h3 class="text-sm text-gray-600">Faturamento mensal (últimos 6 meses)</h3>
+            <canvas id="graficoFaturamentoMensal" style="height:180px"></canvas>
+          </div>
+        </div>
+
+        <div class="grid md:grid-cols-2 gap-4">
+          <div class="bg-white p-4 card-radius shadow">
+            <h3 class="text-sm text-gray-600">Produtos mais vendidos</h3>
+            <ul id="maisVendidos" class="mt-3 list-decimal pl-5 text-sm"></ul>
+          </div>
+          <div class="bg-white p-4 card-radius shadow">
+            <h3 class="text-sm text-gray-600">Produtos menos vendidos</h3>
+            <ul id="menosVendidos" class="mt-3 list-decimal pl-5 text-sm"></ul>
+          </div>
+        </div>
+      </section>
+
+    </main>
+  </div>
+
+  <!--  MODAIS  -->
+
+  <!-- Modal Produto -->
+  <div id="modalProdutoBackdrop" class="hidden fixed inset-0 z-50 flex items-center justify-center modal-backdrop">
+    <div class="bg-white rounded-xl shadow-lg w-full max-w-lg p-6">
+      <h3 id="modalProdutoTitle" class="text-lg font-semibold mb-3">Novo Produto</h3>
+      <input type="hidden" id="produtoId" />
+      <label class="block text-sm text-gray-600">Nome</label>
+      <input id="produtoNome" class="w-full border rounded px-3 py-2 mb-3" />
+      <label class="block text-sm text-gray-600">Preço</label>
+      <input id="produtoPreco" type="number" step="0.01" class="w-full border rounded px-3 py-2 mb-3" />
+      <label class="block text-sm text-gray-600">Estoque</label>
+      <input id="produtoEstoque" type="number" class="w-full border rounded px-3 py-2 mb-3" />
+      <label class="block mb-2">Descrição</label>
+      <textarea id="produtoDescricao" rows="3" class="border rounded w-full p-2 mb-3" placeholder="Digite uma breve descrição do produto..."></textarea>
+      <label class="block text-sm text-gray-600">URL da imagem</label>
+      <input id="produtoImg" class="w-full border rounded px-3 py-2 mb-4" placeholder="https://..." />
+      <div class="flex justify-end gap-2">
+        <button class="px-4 py-2 border rounded" onclick="fecharModalProduto()">Cancelar</button>
+        <button class="px-4 py-2 bg-green-600 text-white rounded" onclick="salvarProduto()">Salvar</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Modal Usuario -->
+  <div id="modalUsuarioBackdrop" class="hidden fixed inset-0 z-50 flex items-center justify-center modal-backdrop">
+    <div class="bg-white rounded-xl shadow-lg w-full max-w-md p-6">
+      <h3 class="text-lg font-semibold mb-3">Editar Usuário</h3>
+      <input type="hidden" id="usuarioId" />
+      <label class="block text-sm text-gray-600">Nome</label>
+      <input id="usuarioNome" class="w-full border rounded px-3 py-2 mb-3" />
+      <label class="block text-sm text-gray-600">Email</label>
+      <input id="usuarioEmail" class="w-full border rounded px-3 py-2 mb-3" />
+      <label class="block text-sm text-gray-600">Telefone</label>
+      <input id="usuarioTelefone" class="w-full border rounded px-3 py-2 mb-3" />
+      <div class="flex items-center gap-3 mb-4">
+        <input id="usuarioIsAdmin" type="checkbox" class="h-4 w-4" />
+        <label class="text-sm text-gray-600">Administrador</label>
+      </div>
+      <div class="flex justify-end gap-2">
+        <button class="px-4 py-2 border rounded" onclick="fecharModalUsuario()">Cancelar</button>
+        <button class="px-4 py-2 bg-green-600 text-white rounded" onclick="salvarUsuario()">Salvar</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Modal Cupom -->
+  <div id="modalCupomBackdrop" class="hidden fixed inset-0 z-50 flex items-center justify-center modal-backdrop">
+    <div class="bg-white rounded-xl shadow-lg w-full max-w-md p-6">
+      <h3 id="modalCupomTitle" class="text-lg font-semibold mb-3">Novo Cupom</h3>
+      <input type="hidden" id="cupomId" />
+      <label class="block text-sm text-gray-600">Código</label>
+      <input id="cupomCodigo" class="w-full border rounded px-3 py-2 mb-3" />
+      <label class="block text-sm text-gray-600">Desconto</label>
+      <input id="cupomDesconto" type="number" step="0.01" class="w-full border rounded px-3 py-2 mb-3" />
+      <label class="block text-sm text-gray-600">Tipo</label>
+      <select id="cupomTipo" class="w-full border rounded px-3 py-2 mb-3">
+        <option value="valor">Valor (R$)</option>
+        <option value="percentual">Percentual (%)</option>
+      </select>
+      <div class="flex items-center mb-3 gap-2">
+        <input type="checkbox" id="cupomAtivo" class="h-4 w-4" checked>
+        <label for="cupomAtivo">Ativo</label>
+      </div>
+      <div class="flex justify-end gap-2">
+        <button class="px-4 py-2 border rounded" onclick="fecharModalCupom()">Cancelar</button>
+        <button class="px-4 py-2 bg-green-600 text-white rounded" onclick="salvarCupom()">Salvar</button>
+      </div>
+    </div>
+  </div>
+
+
+  <script src="assets/vendors/js/vendor.bundle.base.js"></script>
+</body>
+</html>
+
