@@ -345,9 +345,9 @@ SOFTWARE.
 
 **Fabiano Gonçalves**
 
-- 📧 Email: [fabiano@zapp.com.br](mailto:fabiano@zapp.com.br)
-- � GitHub: [@fabianogoncalves](https://github.com/fabianogoncalves)
-- 💼 LinkedIn: [Fabiano Gonçalves](https://linkedin.com/in/fabianogoncalves)
+- 📧 Email: [fabianodev@yahoo.com](mailto:fabianodev@yahoo.com)
+- � GitHub: [@FBGdev](https://github.com/FBGdev)
+- 💼 LinkedIn: [Fabiano Gonçalves](https://linkedin.com/in/fabianodev)
 
 ---
 
@@ -355,7 +355,7 @@ SOFTWARE.
 
 ⭐️ **Obrigado por visitar este projeto!** ⭐️
 
-Feito com 💜 por [Fabiano Gonçalves](https://github.com/fabianogoncalves)
+Feito com 💜 por [Fabiano Gonçalves](https://github.com/FBGdev)
 
 </div>
 
